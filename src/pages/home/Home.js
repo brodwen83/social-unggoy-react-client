@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+
+import Scream from '../../components/screams/Scream';
+
+// MUI
 import Grid from '@material-ui/core/Grid';
-import { Scream } from '../components/screams';
 
 const fetchScreams = async setScreams => {
   try {
