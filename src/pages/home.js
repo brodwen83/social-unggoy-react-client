@@ -14,7 +14,7 @@ const fetchScreams = async setScreams => {
 };
 
 const Home = () => {
-  const [screams, setScreams] = useState([]);
+  const [screams, setScreams] = useState(null);
 
   useEffect(() => {
     fetchScreams(setScreams);
