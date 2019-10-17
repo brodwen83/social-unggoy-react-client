@@ -9,7 +9,7 @@ import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import NavBar from './components/NavBar';
 
 // Pages
-import Home from './pages/home/Home`';
+import Home from './pages/home/Home';
 import Signup from './pages/signup/Signup';
 import Login from './pages/login/Login';
 

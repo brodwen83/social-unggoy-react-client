@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import LoginForm from './LogInForm';
 
 const styles = {
   form: {
@@ -50,36 +51,12 @@ const Login = ({ classes }) => {
         <Typography variant='h3' className={classes.pageTitle}>
           Login
         </Typography>
-        <form noValidate onSubmit={handleSubmit}>
-          <TextField
-            id='email'
-            name='email'
-            type='email'
-            label='Email'
-            value={login.email}
-            fullWidth
-            className={classes.textField}
-            onChange={handleChange}
-          />
-          <TextField
-            id='password'
-            name='password'
-            type='password'
-            label='Password'
-            value={login.password}
-            fullWidth
-            className={classes.textField}
-            onChange={handleChange}
-          />
-          <Button
-            type='submit'
-            variant='contained'
-            color='primary'
-            className={classes.button}
-          >
-            Submit
-          </Button>
-        </form>
+        <LoginForm
+          login={login}
+          classes={classes}
+          onSubmit={handleSubmit}
+          onChange={handleChange}
+        />
       </Grid>
       <Grid item sm />
     </Grid>
