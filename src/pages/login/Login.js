@@ -10,7 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import LoginForm from './LogInForm';
 
 import AppIcon from '../../images/social-unggoy-icon.jpg';
-import logInStyles from './styles';
+
+const styles = theme => ({
+  ...theme.appStyles,
+});
 
 const Login = ({ classes, history }) => {
   const [login, setLogin] = useState({
@@ -28,7 +31,7 @@ const Login = ({ classes, history }) => {
     e.preventDefault();
     console.log('login', login);
 
-    setErrors({ ...errors, general: '' });
+    setErrors({});
     setLoading(true);
 
     const loginData = {
@@ -37,9 +40,11 @@ const Login = ({ classes, history }) => {
     };
 
     try {
-      const res = await axios.post('/login', loginData);
+      const { data } = await axios.post('/login', loginData);
+
       setLoading(false);
-      console.log('res.data', res.data);
+      console.log('res.data', data);
+      localStorage.setItem('FBToken', data.token);
       history.push('/');
     } catch (error) {
       setErrors(error.response.data);
@@ -56,7 +61,7 @@ const Login = ({ classes, history }) => {
           Login
         </Typography>
         <LoginForm
-          login={login}
+          data={login}
           classes={classes}
           onSubmit={handleSubmit}
           onChange={handleChange}
@@ -79,4 +84,4 @@ Login.propTypes = {
   }).isRequired,
 };
 
-export default withStyles(logInStyles)(Login);
+export default withStyles(styles)(Login);

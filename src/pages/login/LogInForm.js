@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
-const LoginForm = ({ onChange, onSubmit, classes, login, errors, loading }) => {
+const LoginForm = ({ onChange, onSubmit, classes, data, errors, loading }) => {
   const loginText = loading ? 'Loging in...' : 'Login';
 
   return (
@@ -16,7 +16,7 @@ const LoginForm = ({ onChange, onSubmit, classes, login, errors, loading }) => {
         name='email'
         type='email'
         label='Email'
-        value={login.email}
+        value={data.email}
         fullWidth
         className={classes.textField}
         onChange={onChange}
@@ -28,7 +28,7 @@ const LoginForm = ({ onChange, onSubmit, classes, login, errors, loading }) => {
         name='password'
         type='password'
         label='Password'
-        value={login.password}
+        value={data.password}
         fullWidth
         className={classes.textField}
         onChange={onChange}
@@ -63,7 +63,7 @@ LoginForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   classes: PropTypes.shape({}).isRequired,
-  login: PropTypes.shape({}).isRequired,
+  data: PropTypes.shape({}).isRequired,
   errors: PropTypes.shape({}).isRequired,
   loading: PropTypes.bool.isRequired,
 };
