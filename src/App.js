@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import './App.css';
 
+// Redux
+import { Provider } from 'react-redux';
+
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './AppTheme';
 
@@ -14,9 +17,10 @@ import Home from './pages/home/Home';
 import Signup from './pages/signup/Signup';
 import Login from './pages/login/Login';
 import AuthRoute from './components/Route/AuthRoute';
+import store from './redux/store';
 
 let authenticated;
-const token = localStorage.FBToken;
+const token = localStorage.FBIdToken;
 
 if (token) {
   const { exp } = jwtDecode(token);
@@ -30,26 +34,28 @@ if (token) {
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <NavBar />
-        <div className='container'>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <AuthRoute
-              authenticated={authenticated}
-              exact
-              path='/login'
-              component={Login}
-            />
-            <AuthRoute
-              authenticated={authenticated}
-              exact
-              path='/signup'
-              component={Signup}
-            />
-          </Switch>
-        </div>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <NavBar />
+          <div className='container'>
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <AuthRoute
+                authenticated={authenticated}
+                exact
+                path='/login'
+                component={Login}
+              />
+              <AuthRoute
+                authenticated={authenticated}
+                exact
+                path='/signup'
+                component={Signup}
+              />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
     </ThemeProvider>
   );
 }
