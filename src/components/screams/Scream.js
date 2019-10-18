@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -24,31 +26,35 @@ const styles = {
   },
 };
 
-const Scream = ({ classes, scream }) => (
-  <Card className={classes.card}>
-    <CardMedia
-      className={classes.image}
-      image={scream.userImage}
-      title='Profile image'
-    />
-    <CardContent className={classes.content}>
-      <Typography
-        variant='h5'
-        component={Link}
-        to={`/users/${scream.userHandle}`}
-        color='primary'
-      >
-        {scream.userHandle}
-      </Typography>
-      <Typography variant='body2' color='textSecondary'>
-        {scream.createdAt}
-      </Typography>
-      <Typography variant='body1' color='textSecondary'>
-        {scream.body}
-      </Typography>
-    </CardContent>
-  </Card>
-);
+const Scream = ({ classes, scream }) => {
+  dayjs.extend(relativeTime);
+
+  return (
+    <Card className={classes.card}>
+      <CardMedia
+        className={classes.image}
+        image={scream.userImage}
+        title='Profile image'
+      />
+      <CardContent className={classes.content}>
+        <Typography
+          variant='h5'
+          component={Link}
+          to={`/users/${scream.userHandle}`}
+          color='primary'
+        >
+          {scream.userHandle}
+        </Typography>
+        <Typography variant='body2' color='textSecondary'>
+          {dayjs(scream.createdAt).fromNow()}
+        </Typography>
+        <Typography variant='body1' color='textSecondary'>
+          {scream.body}
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+};
 
 Scream.propTypes = {
   classes: PropTypes.shape({}).isRequired,
