@@ -1,32 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
-import AppIcon from '../../images/social-unggoy-icon.jpg';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 // MUI stuff
 import withStyles from '@material-ui/core/styles/withStyles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import LoginForm from './LogInForm';
 
-const styles = {
-  form: {
-    textAlign: 'center',
-  },
-  image: {
-    margin: '20px auto 20px auto',
-  },
-  pageTitle: {
-    margin: '10px auto 10px auto',
-  },
-  textField: {
-    margin: '10px auto 10px auto',
-  },
-};
+import AppIcon from '../../images/social-unggoy-icon.jpg';
+import logInStyles from './styles';
 
-const Login = ({ classes }) => {
+const Login = ({ classes, history }) => {
   const [login, setLogin] = useState({
     email: '',
     password: '',
@@ -38,9 +24,27 @@ const Login = ({ classes }) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     console.log('login', login);
+
+    setErrors({ ...errors, general: '' });
+    setLoading(true);
+
+    const loginData = {
+      email: login.email,
+      password: login.password,
+    };
+
+    try {
+      const res = await axios.post('/login', loginData);
+      setLoading(false);
+      console.log('res.data', res.data);
+      history.push('/');
+    } catch (error) {
+      setErrors(error.response.data);
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,7 +52,7 @@ const Login = ({ classes }) => {
       <Grid item sm />
       <Grid item sm>
         <img src={AppIcon} alt='unggoy' width={42} className={classes.image} />
-        <Typography variant='h3' className={classes.pageTitle}>
+        <Typography variant='h2' className={classes.pageTitle}>
           Login
         </Typography>
         <LoginForm
@@ -56,7 +60,12 @@ const Login = ({ classes }) => {
           classes={classes}
           onSubmit={handleSubmit}
           onChange={handleChange}
+          errors={errors}
+          loading={loading}
         />
+        <Typography variant='caption'>
+          Don't have an account? sign up <Link to='/signup'>here</Link>.
+        </Typography>
       </Grid>
       <Grid item sm />
     </Grid>
@@ -65,6 +74,9 @@ const Login = ({ classes }) => {
 
 Login.propTypes = {
   classes: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(logInStyles)(Login);
