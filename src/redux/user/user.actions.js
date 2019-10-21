@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import { SET_USER } from './user.types';
+import {
+  SET_USER,
+  SET_USER_UNAUTENTICATED,
+  SET_USER_AUTENTICATED,
+} from './user.types';
 import { uiIsLoading, setUIErrors, clearUIErrors } from '../ui/ui.actions';
 
 // action creators
@@ -9,6 +13,23 @@ export const userLoggedIn = data => ({
   payload: { data },
 });
 
+export const userLoggedOut = () => ({
+  type: SET_USER_UNAUTENTICATED,
+});
+
+export const authenticateUser = token => ({
+  type: SET_USER_AUTENTICATED,
+  payload: { token },
+});
+
+// helpers
+const setAuthorizationHeader = token => {
+  const FBIdToken = token;
+
+  localStorage.setItem('FBIdToken', FBIdToken);
+  axios.defaults.headers.common['Authorization'] = FBIdToken;
+};
+
 export const loginUser = (userData, history) => async dispatch => {
   dispatch(uiIsLoading);
   try {
@@ -16,17 +37,37 @@ export const loginUser = (userData, history) => async dispatch => {
     dispatch(uiIsLoading());
 
     const { data } = await axios.post('/login', userData);
-    const FBIdToken = data.token;
-
-    localStorage.setItem('FBIdToken', FBIdToken);
-    axios.defaults.headers.common['Authorization'] = FBIdToken;
-
+    setAuthorizationHeader(data.token);
+    dispatch(authenticateUser(data.token));
     dispatch(getUserData());
     history.push('/');
   } catch (error) {
     console.log(error.response.data);
     dispatch(setUIErrors(error.response.data));
   }
+};
+
+export const signupUser = (newUserData, history) => async dispatch => {
+  dispatch(uiIsLoading);
+  try {
+    dispatch(clearUIErrors());
+    dispatch(uiIsLoading());
+
+    const { data } = await axios.post('/signup', newUserData);
+    setAuthorizationHeader(data.token);
+    dispatch(authenticateUser(data.token));
+    dispatch(getUserData());
+    history.push('/');
+  } catch (error) {
+    console.log(error.response.data);
+    dispatch(setUIErrors(error.response.data));
+  }
+};
+
+export const logoutUser = () => dispatch => {
+  localStorage.removeItem('FBIdToken');
+  delete axios.defaults.headers.common['Authorization'];
+  dispatch(userLoggedOut());
 };
 
 export const getUserData = () => async dispatch => {

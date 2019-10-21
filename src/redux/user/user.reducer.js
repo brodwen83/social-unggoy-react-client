@@ -5,7 +5,7 @@ import {
 } from './user.types';
 
 const initialState = {
-  authenticated: false,
+  auth: { authenticated: false, token: '' },
   data: {},
 };
 
@@ -14,13 +14,13 @@ const userReducer = (state = initialState, action) => {
     case SET_USER_AUTENTICATED:
       return {
         ...state,
-        authenticated: true,
+        auth: { authenticated: true, token: action.payload.token },
       };
     case SET_USER_UNAUTENTICATED:
-      return initialState;
+      return { ...initialState };
     case SET_USER:
       return {
-        authenticated: true,
+        ...state,
         data: { ...action.payload.data },
       };
     default:

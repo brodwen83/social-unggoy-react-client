@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
-import Scream from '../../components/screams/Scream';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+
+import Scream from '../../components/screams/Scream';
+import { logoutUser } from '../../redux/user/user.actions';
+import { UserProfile } from '../../components/profile';
 
 const fetchScreams = async setScreams => {
   try {
@@ -16,7 +21,7 @@ const fetchScreams = async setScreams => {
   }
 };
 
-const Home = () => {
+const Home = ({ logout }) => {
   const [screams, setScreams] = useState(null);
 
   useEffect(() => {
@@ -35,10 +40,17 @@ const Home = () => {
         {recentScreamsMarkup}
       </Grid>
       <Grid item sm={4} xs={12}>
-        <p>Profile...</p>
+        <UserProfile />
       </Grid>
     </Grid>
   );
 };
 
-export default Home;
+const mapDispatchToProps = () => dispatch => ({
+  logout: () => dispatch(logoutUser()),
+});
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Home);

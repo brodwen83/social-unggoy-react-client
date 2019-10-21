@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+// redux stuff
+import { connect } from 'react-redux';
+import { signupUser } from '../../redux/user/user.actions';
 
 // MUI stuff
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -15,38 +18,27 @@ const styles = theme => ({
   ...theme.appStyles,
 });
 
-const Signup = ({ classes, history }) => {
-  const [signupData, setSignupData] = useState({
+const Signup = ({ classes, history, UI, users, signupUser }) => {
+  const [newUserData, setNewUserData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
     handle: '',
   });
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (errors !== UI.errors && errors !== {}) setErrors(UI.errors);
+  }, [errors, UI.errors]);
 
   const handleChange = e => {
-    setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    setNewUserData({ ...newUserData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    console.log('login', signupData);
-
-    setErrors({});
-    setLoading(true);
-
-    try {
-      const { data } = await axios.post('/signup', { ...signupData });
-
-      setLoading(false);
-      console.log('res.data', data);
-      localStorage.setItem('FBToken', data.token);
-      history.push('/');
-    } catch (error) {
-      setErrors(error.response.data);
-      setLoading(false);
-    }
+    console.log('login', newUserData);
+    signupUser(newUserData, history);
   };
 
   return (
@@ -58,12 +50,12 @@ const Signup = ({ classes, history }) => {
           Signup
         </Typography>
         <SignupForm
-          data={signupData}
+          data={newUserData}
           classes={classes}
           onSubmit={handleSubmit}
           onChange={handleChange}
           errors={errors}
-          loading={loading}
+          loading={UI.loading}
         />
         <Typography variant='caption'>
           Already have an account? login <Link to='/login'>here</Link>.
@@ -79,6 +71,17 @@ Signup.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  user: PropTypes.shape({}).isRequired,
+  UI: PropTypes.shape({}).isRequired,
+  signupUser: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Signup);
+const mapStateToProps = state => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+export default connect(
+  mapStateToProps,
+  { signupUser },
+)(withStyles(styles)(Signup));
