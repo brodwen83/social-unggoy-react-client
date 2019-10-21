@@ -2,23 +2,24 @@ import axios from 'axios';
 
 import {
   SET_USER,
-  SET_USER_UNAUTENTICATED,
-  SET_USER_AUTENTICATED,
+  SET_USER_UNAUTHENTICATED,
+  SET_USER_AUTHENTICATED,
+  LOADING_USER,
 } from './user.types';
 import { uiIsLoading, setUIErrors, clearUIErrors } from '../ui/ui.actions';
 
 // action creators
-export const userLoggedIn = data => ({
+export const setUserDataResponse = data => ({
   type: SET_USER,
   payload: { data },
 });
 
 export const userLoggedOut = () => ({
-  type: SET_USER_UNAUTENTICATED,
+  type: SET_USER_UNAUTHENTICATED,
 });
 
 export const authenticateUser = token => ({
-  type: SET_USER_AUTENTICATED,
+  type: SET_USER_AUTHENTICATED,
   payload: { token },
 });
 
@@ -71,12 +72,13 @@ export const logoutUser = () => dispatch => {
 };
 
 export const getUserData = () => async dispatch => {
+  dispatch({ type: LOADING_USER });
+  dispatch(clearUIErrors());
   try {
     const { data } = await axios.get('/user');
     console.log('data', data);
 
-    dispatch(userLoggedIn(data));
-    dispatch(clearUIErrors());
+    dispatch(setUserDataResponse(data));
   } catch (error) {
     console.error(error);
     dispatch(setUIErrors(error.response.data));
