@@ -11,7 +11,7 @@ import LoginForm from './LogInForm';
 
 import AppIcon from '../../images/social-unggoy-icon.jpg';
 
-import { loginUser } from '../../redux/user/user.actions';
+import { loginUser } from '../../redux/auth/auth.actions';
 
 const styles = theme => ({
   ...theme.appStyles,
@@ -26,8 +26,9 @@ const Login = ({ classes, history, login, UI, user }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (errors !== UI.errors && errors !== {}) setErrors(UI.errors);
-  }, [errors, UI.errors]);
+    if (errors !== user.errors && errors !== {}) setErrors(user.errors);
+    return () => {};
+  }, [errors, user.errors]);
 
   const handleChange = e => {
     setLoginValues({ ...loginValues, [e.target.name]: e.target.value });
@@ -75,12 +76,10 @@ Login.propTypes = {
   }).isRequired,
   login: PropTypes.func.isRequired,
   user: PropTypes.shape({}).isRequired,
-  UI: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
   user: state.user,
-  UI: state.UI,
 });
 
 const mapDispatchToProps = {
