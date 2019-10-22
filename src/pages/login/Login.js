@@ -11,13 +11,13 @@ import LoginForm from './LogInForm';
 
 import AppIcon from '../../images/social-unggoy-icon.jpg';
 
-import { loginUser } from '../../redux/user/user.actions';
+import { loginUser } from '../../redux/auth/auth.actions';
 
 const styles = theme => ({
   ...theme.appStyles,
 });
 
-const Login = ({ classes, history, login, UI, user }) => {
+const Login = ({ classes, history, login, user, auth }) => {
   const [loginValues, setLoginValues] = useState({
     email: '',
     password: '',
@@ -26,8 +26,9 @@ const Login = ({ classes, history, login, UI, user }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (errors !== UI.errors && errors !== {}) setErrors(UI.errors);
-  }, [errors, UI.errors]);
+    if (errors !== auth.errors && errors !== {}) setErrors(auth.errors);
+    return () => {};
+  }, [errors, auth.errors]);
 
   const handleChange = e => {
     setLoginValues({ ...loginValues, [e.target.name]: e.target.value });
@@ -37,11 +38,10 @@ const Login = ({ classes, history, login, UI, user }) => {
     e.preventDefault();
     console.log('login', loginValues);
 
-    setErrors({});
     login(loginValues, history);
   };
 
-  const { loading } = UI;
+  const { isLoggingIn } = auth;
 
   return (
     <Grid container className={classes.form}>
@@ -57,7 +57,7 @@ const Login = ({ classes, history, login, UI, user }) => {
           onSubmit={handleSubmit}
           onChange={handleChange}
           errors={errors}
-          loading={loading}
+          loading={isLoggingIn}
         />
         <Typography variant='caption'>
           Don't have an account? sign up <Link to='/signup'>here</Link>.
@@ -75,12 +75,12 @@ Login.propTypes = {
   }).isRequired,
   login: PropTypes.func.isRequired,
   user: PropTypes.shape({}).isRequired,
-  UI: PropTypes.shape({}).isRequired,
+  auth: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
   user: state.user,
-  UI: state.UI,
+  auth: state.auth,
 });
 
 const mapDispatchToProps = {

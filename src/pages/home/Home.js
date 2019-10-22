@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 
 import Scream from '../../components/screams/Scream';
-import { logoutUser } from '../../redux/user/user.actions';
+import { logoutUser } from '../../redux/auth/auth.actions';
 import { UserProfile } from '../../components/profile';
 
 const fetchScreams = async setScreams => {

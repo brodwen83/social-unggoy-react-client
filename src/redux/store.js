@@ -4,12 +4,14 @@ import thunk from 'redux-thunk';
 import userReducer from './user/user.reducer';
 import dataReducer from './data/data.reducer';
 import uiReducer from './ui/ui.reducer';
+import authReducer from './auth/auth.reducer';
 
 const initialState = {};
 
 const middleware = [thunk];
 
 const reducers = combineReducers({
+  auth: authReducer,
   user: userReducer,
   data: dataReducer,
   UI: uiReducer,

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 // redux stuff
 import { connect } from 'react-redux';
-import { signupUser } from '../../redux/user/user.actions';
+import { signupUser } from '../../redux/auth/auth.actions';
 
 // MUI stuff
 import withStyles from '@material-ui/core/styles/withStyles';

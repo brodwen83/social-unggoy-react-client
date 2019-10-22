@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { decodeToken } from '../../utils/decodeToken';
-import { userLoggedOut } from '../../redux/user/user.actions';
+import { userLoggedOut } from '../../redux/auth/auth.actions';
 
 const AuthRoute = ({
   component: Component,
-  authenticated,
+  isAuthenticated,
   decodedToken: { tokenExpired },
   logout,
   ...rest
 }) => {
   if (tokenExpired) {
+    console.log('Token expired.', tokenExpired);
     logout();
     return <Redirect to='/login' />;
   }
@@ -20,18 +21,18 @@ const AuthRoute = ({
     <Route
       {...rest}
       render={props =>
-        authenticated ? <Redirect to='/' /> : <Component {...props} />
+        isAuthenticated ? <Redirect to='/' /> : <Component {...props} />
       }
     />
   );
 };
 
 const mapStateToProps = state => {
-  const { authenticated } = state.user.auth;
+  const { isAuthenticated, token } = state.auth;
 
   return {
-    authenticated,
-    decodedToken: decodeToken(state.user.auth.token),
+    isAuthenticated,
+    decodedToken: decodeToken(token),
   };
 };
 
@@ -40,7 +41,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 AuthRoute.propTypes = {
-  authenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   decodedToken: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
 };

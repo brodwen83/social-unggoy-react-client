@@ -1,29 +1,17 @@
-import {
-  SET_USER_AUTHENTICATED,
-  SET_USER_UNAUTHENTICATED,
-  SET_USER,
-  LOADING_USER,
-} from './user.types';
+import { SET_USER, LOADING_USER, USER_ERROR_RESPONSE } from './user.types';
 
 const initialState = {
-  auth: { authenticated: false, token: '' },
   loading: false,
   data: {
     credentials: {},
     likes: [],
     notifications: [],
   },
+  errors: null,
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_USER_AUTHENTICATED:
-      return {
-        ...state,
-        auth: { authenticated: true, token: action.payload.token },
-      };
-    case SET_USER_UNAUTHENTICATED:
-      return { ...initialState };
     case SET_USER:
       return {
         ...state,
@@ -34,6 +22,12 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+      };
+    case USER_ERROR_RESPONSE:
+      return {
+        ...state,
+        errors: action.payload.errors,
+        loading: false,
       };
     default:
       return state;

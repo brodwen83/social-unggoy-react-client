@@ -57,10 +57,10 @@ const ProfileDetails = ({
           </React.Fragment>
         )}
         {createdAt && (
-          <CalendarToday color='primary'>
-            {' '}
-            <span>Joined {dayjs(createdAt).format('MM / DD / YYYY')}</span>
-          </CalendarToday>
+          <React.Fragment>
+            <CalendarToday color='primary' />
+            <small>Joined {dayjs(createdAt).format('MMM YYYY')}</small>
+          </React.Fragment>
         )}
       </div>
     </div>
