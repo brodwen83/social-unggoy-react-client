@@ -15,6 +15,8 @@ import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import EditIcon from '@material-ui/icons/Edit';
+import KeyBoardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import EditDetails from './EditDetails';
 
 const ProfileDetails = ({
   classes,
@@ -25,6 +27,7 @@ const ProfileDetails = ({
   website,
   createdAt,
   onImageChange,
+  onLogout,
 }) => {
   const handleEditPicture = () => {
     const fileInput = document.getElementById('imageInput');
@@ -85,6 +88,14 @@ const ProfileDetails = ({
             </React.Fragment>
           )}
         </div>
+        <div className={classes.actionsWrapper}>
+          <Tooltip title='Logout' placement='top'>
+            <IconButton onClick={onLogout}>
+              <KeyBoardReturnIcon color='primary' />
+            </IconButton>
+          </Tooltip>
+          <EditDetails />
+        </div>
       </div>
     </Paper>
   );
@@ -99,6 +110,7 @@ ProfileDetails.propTypes = {
   website: PropTypes.string,
   createdAt: PropTypes.string,
   onImageChange: PropTypes.func.isRequired,
+  onLogout: PropTypes.func.isRequired,
 };
 
 export default ProfileDetails;

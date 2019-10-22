@@ -45,6 +45,10 @@ const styles = theme => ({
       margin: '20px 10px',
     },
   },
+  actionsWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
 });
 
 export default styles;

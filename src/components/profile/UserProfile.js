@@ -8,6 +8,7 @@ import ProfileDetails from './ProfileDetails';
 import NoProfileDetails from './NoProfileDetails';
 import { getUserData, uploadImage } from '../../redux/user/user.actions';
 import { decodeToken } from '../../utils/decodeToken';
+import { logoutUser } from '../../redux/auth/auth.actions';
 
 const UserProfile = ({
   classes,
@@ -18,6 +19,7 @@ const UserProfile = ({
   auth: { isAuthenticated, token },
   getUser,
   changeUserImage,
+  loggedOutUser,
 }) => {
   const { tokenExpired } = decodeToken(token);
 
@@ -43,6 +45,7 @@ const UserProfile = ({
       classes={classes}
       {...credentials}
       onImageChange={handleImageChange}
+      onLogout={loggedOutUser}
     />
   );
 };
@@ -53,6 +56,7 @@ UserProfile.propTypes = {
   auth: PropTypes.object.isRequired,
   getUser: PropTypes.func.isRequired,
   changeUserImage: PropTypes.func.isRequired,
+  loggedOutUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -63,6 +67,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   getUser: () => dispatch(getUserData()),
   changeUserImage: formData => dispatch(uploadImage(formData)),
+  loggedOutUser: () => dispatch(logoutUser()),
 });
 
 export default connect(

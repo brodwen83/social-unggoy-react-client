@@ -17,6 +17,8 @@ class APIClient {
   };
 
   read = route => this.axiosInstance.get(route).then(res => res.data);
+  update = (route, newData) =>
+    this.axiosInstance.post(route, newData).then(res => res.data);
 
   imageUpload = formData =>
     this.axiosInstance.post('/user/image', formData).then(res => res.data);
