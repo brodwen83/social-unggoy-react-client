@@ -10,7 +10,6 @@ import { getUserData } from '../../redux/user/user.actions';
 
 const UserProfile = ({
   classes,
-  user,
   user: {
     loading,
     data: { credentials },
@@ -19,21 +18,13 @@ const UserProfile = ({
   getUser,
 }) => {
   useEffect(() => {
-    getUser();
-  }, [getUser]);
+    if (isAuthenticated) getUser();
+  }, [getUser, isAuthenticated]);
 
-  console.log('UserProfile->credentials', user.data.credentials);
-  let userProfileMarkup = !loading ? (
-    isAuthenticated ? (
-      <ProfileDetails classes={classes} {...credentials} />
-    ) : (
-      <NoProfileDetails classes={classes} />
-    )
-  ) : (
-    <p>Loading...</p>
-  );
-
-  return userProfileMarkup;
+  console.log('UserProfile->credentials', credentials);
+  if (loading) return <p>Loading...</p>;
+  if (!isAuthenticated) return <NoProfileDetails classes={classes} />;
+  return <ProfileDetails classes={classes} {...credentials} />;
 };
 
 UserProfile.propTypes = {

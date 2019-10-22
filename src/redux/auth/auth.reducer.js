@@ -4,7 +4,7 @@ const initialState = {
   isAuthenticated: false,
   token: '',
   isLoggingIn: false,
-  errors: null,
+  errors: {},
 };
 
 export default function(state = initialState, action) {
@@ -13,6 +13,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isLoggingIn: true,
+        errors: {},
       };
     case LOGOUT:
       return { ...initialState };
@@ -27,6 +28,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         errors: action.payload.errors,
+        isLoggingIn: false,
       };
     default:
       return state;

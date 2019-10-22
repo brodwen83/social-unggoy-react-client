@@ -1,7 +1,6 @@
 import APIClient from '../../modules/database.infrastructure';
 
 import { SET_USER, LOADING_USER, USER_ERROR_RESPONSE } from './user.types';
-import { setUIErrors, clearUIErrors } from '../ui/ui.actions';
 
 // action creators
 export const setUserDataResponse = data => ({
@@ -21,15 +20,13 @@ export const setUserErrorsResponse = error => {
 
 // Request
 export const getUserData = () => async dispatch => {
-  dispatch({ type: LOADING_USER });
-  dispatch(clearUIErrors());
   try {
+    dispatch({ type: LOADING_USER });
     const data = await APIClient.read('/user');
 
     dispatch(setUserDataResponse(data));
   } catch (error) {
-    console.error(error);
-    dispatch(setUIErrors(error.response.data));
-    dispatch(setUserErrorsResponse(error.response.data));
+    console.error('getUserData->error', error);
+    dispatch(setUserErrorsResponse(error.response));
   }
 };

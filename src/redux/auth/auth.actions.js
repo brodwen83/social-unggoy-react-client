@@ -4,12 +4,8 @@ import APIClient from '../../modules/database.infrastructure';
 import { LOGIN, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT } from './auth.types';
 
 // Action creators
-export const login = (email, password) => ({
+export const login = () => ({
   type: LOGIN,
-  pyload: {
-    email,
-    password,
-  },
 });
 
 export const userLoggedIn = token => {
@@ -37,6 +33,7 @@ export const logoutUser = () => dispatch => {
 // requests
 export const loginUser = (userData, history) => async dispatch => {
   try {
+    dispatch(login());
     const { data } = await axios.post('/login', userData);
     dispatch(userLoggedIn(data.token));
     APIClient.init(data.token);
@@ -51,6 +48,7 @@ export const loginUser = (userData, history) => async dispatch => {
 export const signupUser = (newUserData, history) => async dispatch => {
   try {
     const { data } = await axios.post('/signup', newUserData);
+    dispatch(userLoggedIn(data.token));
     dispatch(userLoggedIn(data.token));
     APIClient.init(data.token);
     history.push('/');
