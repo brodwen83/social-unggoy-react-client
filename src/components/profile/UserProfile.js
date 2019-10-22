@@ -6,7 +6,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import styles from './userProfile.styles';
 import ProfileDetails from './ProfileDetails';
 import NoProfileDetails from './NoProfileDetails';
-import { getUserData } from '../../redux/user/user.actions';
+import { getUserData, uploadImage } from '../../redux/user/user.actions';
+import { decodeToken } from '../../utils/decodeToken';
 
 const UserProfile = ({
   classes,
@@ -14,33 +15,54 @@ const UserProfile = ({
     loading,
     data: { credentials },
   },
-  isAuthenticated,
+  auth: { isAuthenticated, token },
   getUser,
+  changeUserImage,
 }) => {
+  const { tokenExpired } = decodeToken(token);
+
   useEffect(() => {
-    if (isAuthenticated) getUser();
-  }, [getUser, isAuthenticated]);
+    if (isAuthenticated && !tokenExpired) getUser();
+  }, [getUser, isAuthenticated, tokenExpired]);
+
+  const handleImageChange = event => {
+    const image = event.target.files[0];
+    const formData = new FormData();
+    if (image) {
+      formData.append('image', image);
+      changeUserImage(formData);
+    }
+  };
 
   console.log('UserProfile->credentials', credentials);
   if (loading) return <p>Loading...</p>;
-  if (!isAuthenticated) return <NoProfileDetails classes={classes} />;
-  return <ProfileDetails classes={classes} {...credentials} />;
+  if (!isAuthenticated || tokenExpired)
+    return <NoProfileDetails classes={classes} />;
+  return (
+    <ProfileDetails
+      classes={classes}
+      {...credentials}
+      onImageChange={handleImageChange}
+    />
+  );
 };
 
 UserProfile.propTypes = {
   user: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  auth: PropTypes.object.isRequired,
   getUser: PropTypes.func.isRequired,
+  changeUserImage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
   user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
   getUser: () => dispatch(getUserData()),
+  changeUserImage: formData => dispatch(uploadImage(formData)),
 });
 
 export default connect(

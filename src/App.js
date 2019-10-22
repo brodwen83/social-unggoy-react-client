@@ -6,7 +6,7 @@ import './App.css';
 // Redux
 import { Provider } from 'react-redux';
 import store from './redux/store';
-import { userLoggedOut } from './redux/auth/auth.actions';
+import { logoutUser } from './redux/auth/auth.actions';
 
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './AppTheme';
@@ -27,7 +27,7 @@ if (token) {
   console.log('there is token: ', token);
   APIClient.init(token);
   store.dispatch(userLoggedIn(token));
-} else store.dispatch(userLoggedOut());
+} else store.dispatch(logoutUser());
 
 function App() {
   return (

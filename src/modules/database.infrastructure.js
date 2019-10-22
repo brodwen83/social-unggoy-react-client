@@ -16,11 +16,10 @@ class APIClient {
     });
   };
 
-  read = route => {
-    console.log('config.apiURL', config.apiURL);
-    console.log('this.axiosInstance', this.axiosInstance);
-    return this.axiosInstance.get(route).then(res => res.data);
-  };
+  read = route => this.axiosInstance.get(route).then(res => res.data);
+
+  imageUpload = formData =>
+    this.axiosInstance.post('/user/image', formData).then(res => res.data);
 }
 
 export default new APIClient();
