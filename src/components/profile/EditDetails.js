@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { edituserDetails } from '../../redux/user/user.actions';
+import MyButton from '../mybutton/MyButton';
 
 // MUI
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -66,11 +65,9 @@ const EditDetails = ({ classes, user, updateUser }) => {
 
   return (
     <div>
-      <Tooltip title='Edit details' placement='top'>
-        <IconButton color='primary' onClick={handleOpenDialog}>
-          <EditIcon color='primary' />
-        </IconButton>
-      </Tooltip>
+      <MyButton tip='Edit details' onClick={handleOpenDialog}>
+        <EditIcon color='primary' />
+      </MyButton>
       <Dialog
         open={open}
         onClose={handleCloseDialog}

@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
+import MyButton from '../mybutton/MyButton';
 
 // MUI stuff
 import MuiLink from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 
 // Icons
 import LocationOn from '@material-ui/icons/LocationOn';
@@ -46,11 +45,13 @@ const ProfileDetails = ({
             value=''
             hidden='hidden'
           />
-          <Tooltip title='Change Profile Image' placement='top'>
-            <IconButton onClick={handleEditPicture} className='button'>
-              <EditIcon color='primary' />
-            </IconButton>
-          </Tooltip>
+          <MyButton
+            tip='Change profile image'
+            onClick={handleEditPicture}
+            btnClassName='button'
+          >
+            <EditIcon color='primary' />
+          </MyButton>
         </div>
         <hr />
         <div className='profile-details'>
@@ -89,11 +90,9 @@ const ProfileDetails = ({
           )}
         </div>
         <div className={classes.actionsWrapper}>
-          <Tooltip title='Logout' placement='top'>
-            <IconButton onClick={onLogout}>
-              <KeyBoardReturnIcon color='primary' />
-            </IconButton>
-          </Tooltip>
+          <MyButton tip='Logout' onClick={onLogout}>
+            <KeyBoardReturnIcon color='primary' />
+          </MyButton>
           <EditDetails />
         </div>
       </div>
